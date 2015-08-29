@@ -1,40 +1,36 @@
 package com.group4.main;
 
-import com.group4.main.model.Cell;
 import com.group4.main.model.Field;
+import com.group4.main.model.HumanPlayer;
 import com.group4.main.model.Player;
 
 /**
  * @author darkwizard
  */
 public class Game {
-	Field gameField;
-	Player player1;
-	Player player2;
+	Field gameField = new Field(3);
+	Player player1 = new HumanPlayer('X');
+	Player player2 = new HumanPlayer('O');
 
 	Player currPlayer;
-	private boolean isPlaying;
+	private boolean isPlaying = true;
 
 	Game() {
-		currPlayer = player1;
+		currPlayer = player2;
 		while (this.isPlaying) {
-			setMark(currPlayer.getSelection(this.gameField));
-			this.isPlaying = currPlayer.isWinningTurn();
 			this.currPlayer = this.swapPlayer();
+			currPlayer.makeTurn(this.gameField);
+			this.isPlaying = !currPlayer.isWinningTurn();
 		}
 
 		endGame();
-	}
-
-	public void setMark(Cell at) {
-
 	}
 
 	/**
 	 * Show winning text, maybe
 	 */
 	public void endGame() {
-
+		System.out.println("\"" + this.currPlayer.getSymbol() + "\" wins!");
 	}
 
 	public Player swapPlayer() {
