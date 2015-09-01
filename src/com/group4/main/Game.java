@@ -1,5 +1,6 @@
 package com.group4.main;
 
+import com.group4.main.model.BotPlayer;
 import com.group4.main.model.Field;
 import com.group4.main.model.HumanPlayer;
 import com.group4.main.model.Player;
@@ -9,20 +10,22 @@ import com.group4.main.model.Player;
  */
 public class Game {
 	Field gameField = new Field(3);
+//	Player player1 = new BotPlayer('X');
 	Player player1 = new HumanPlayer('X');
-	Player player2 = new HumanPlayer('O');
-
-	Player currPlayer;
-	private boolean isPlaying = true;
+//	Player player2 = new HumanPlayer('X');
+	Player player2 = new BotPlayer('O');
+	Player currPlayer = player2;
 
 	Game() {
-		currPlayer = player2;
-		while (this.isPlaying) {
+		boolean isPlaying = true;
+		while (isPlaying) {
 			this.currPlayer = this.swapPlayer();
+			this.gameField.printField();
 			currPlayer.makeTurn(this.gameField);
-			this.isPlaying = !currPlayer.isWinningTurn();
+			isPlaying = !currPlayer.isWinningTurn(this.gameField);
 		}
 
+		this.gameField.printField();
 		endGame();
 	}
 
@@ -30,7 +33,10 @@ public class Game {
 	 * Show winning text, maybe
 	 */
 	public void endGame() {
-		System.out.println("\"" + this.currPlayer.getSymbol() + "\" wins!");
+		if (this.gameField.isFilledCompletely())
+			System.out.println("Draw!");
+		else
+			System.out.println("\"" + this.currPlayer.getSymbol() + "\" wins!");
 	}
 
 	public Player swapPlayer() {
